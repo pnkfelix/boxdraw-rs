@@ -1,6 +1,7 @@
 use std::fmt;
 use Command;
 
+#[deriving(PartialEq, Eq, PartialOrd, Ord)]
 pub struct Grid {
     width: u32,
     height: u32,
@@ -15,6 +16,7 @@ impl fmt::Show for Grid {
     }
 }
 
+#[deriving(PartialEq, Eq, PartialOrd, Ord)]
 pub enum ParseErr {
     PrematureLineEnd(u32, String, u32),
     BadTerminationChar(u32, String, char),
@@ -67,23 +69,29 @@ impl Grid {
         let mut h = 0;
 
         loop {
-            h += 1;
+            let mut started_line = false;
             let row_start = grid.len();
             for i in range(0, w) {
                 match (i, chars.next()) {
                     (0, None) => break,
                     (_, None) => {
-                        let line = grid.slice_from(row_start).to_string();
+                        let line = String::from_chars(grid.slice_from(row_start));
                         return Err(PrematureLineEnd(h, line, w))
                     }
-                    (_, Some(c)) => grid.push(c),
+                    (_, Some(c)) => {
+                        if !started_line {
+                            h += 1;
+                            started_line = true;
+                        }
+                        grid.push(c)
+                    }
                 }
             }
             match chars.next() {
                 None => break,
                 Some('\n') => continue,
                 Some(c) => {
-                    let line = grid.slice_from(row_start).to_string();
+                    let line = String::from_chars(grid.slice_from(row_start));
                     return Err(BadTerminationChar(h, line, c))
                 }
             }
@@ -147,4 +155,30 @@ impl Grid {
             }
         }
     }
+}
+
+#[test]
+fn simple_parse() {
+    assert_eq!(Grid::from_str("...").unwrap(),
+               Grid {width: 3, height: 1, chars: "...".chars().collect() });
+    assert_eq!(Grid::from_str("...\n").unwrap(),
+               Grid {width: 3, height: 1, chars: "...".chars().collect() });
+    assert_eq!(Grid::from_str("...\n...\n").unwrap(),
+               Grid {width: 3, height: 2, chars: "......".chars().collect() });
+    assert_eq!(Grid::from_str("...\n...").unwrap(),
+               Grid {width: 3, height: 2, chars: "......".chars().collect() });
+    assert_eq!(Grid::from_str("abc\ndef\n").unwrap(),
+               Grid {width: 3, height: 2, chars: "abcdef".chars().collect() });
+}
+
+#[test]
+fn premature_line_end() {
+    assert_eq!(Grid::from_str("abc\nd"),
+               Err(PrematureLineEnd(2, "d".to_string(), 3)));
+}
+
+#[test]
+fn unexpected_terminator() {
+    assert_eq!(Grid::from_str("abc\ndefg"),
+               Err(BadTerminationChar(2, "def".to_string(), 'g')))
 }
