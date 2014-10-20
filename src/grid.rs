@@ -84,6 +84,9 @@ impl Grid {
         Ok(Grid { width: w, height: h, chars: grid })
     }
 
+    pub fn width(&self) -> u32 { self.width }
+    pub fn height(&self) -> u32 { self.height }
+
     pub fn get(&self, x: u32, y: u32) -> char {
         assert!(x < self.width);
         assert!(y < self.height);
