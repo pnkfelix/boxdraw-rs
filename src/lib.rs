@@ -1,5 +1,5 @@
 /// Script for drawing rectangle-based ASCII art.
-#[deriving(Clone)]
+#[deriving(Clone, Show)]
 pub struct Script {
     /// Width of the generated picture.
     pub width: u32,
@@ -13,7 +13,7 @@ pub struct Script {
 
 /// Draws a rectangle at (`x`,`y`) with width `w` and height `h`,
 /// filled with the character `fill` (if there is room for it).
-#[deriving(Clone)]
+#[deriving(Clone, Show)]
 pub struct Command {
     pub x: u32,
     pub y: u32,

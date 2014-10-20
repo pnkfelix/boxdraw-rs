@@ -7,6 +7,14 @@ pub struct Grid {
     chars: Vec<char>,
 }
 
+impl fmt::Show for Grid {
+    fn fmt(&self, w: &mut fmt::Formatter) -> fmt::Result {
+        let s: String = String::from_chars(self.chars.as_slice());
+        write!(w, "Grid {{ width: {}, height: {}, chars: {} }}",
+               self.width, self.height, s)
+    }
+}
+
 pub enum ParseErr {
     PrematureLineEnd(u32, String, u32),
     BadTerminationChar(u32, String, char),
