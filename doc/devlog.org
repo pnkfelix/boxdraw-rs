@@ -1,0 +1,29 @@
+* Start boxdraw-rs library
+** Script and Command structs
+   CLOCK: [2014-10-20 Mon 09:07]--[2014-10-20 Mon 09:14] =>  0:07
+
+** The Grid
+   CLOCK: [2014-10-20 Mon 09:14]--[2014-10-20 Mon 09:34] =>  0:20
+
+** Grid::exec(Command)
+   CLOCK: [2014-10-20 Mon 09:34]--[2014-10-20 Mon 10:08] =>  0:34
+
+   * (a bit distracted by filing 
+      https://github.com/rust-lang/rust/issues/18180
+      along the way)
+
+** added draw_line support
+   CLOCK: [2014-10-20 Mon 10:08]--[2014-10-20 Mon 10:15] =>  0:00
+
+** factoring into multiple files (lib, grid, test)
+   CLOCK: [2014-10-20 Mon 10:15]--[2014-10-20 Mon 10:20] =>  0:05
+
+** added few more examples (stout, skinny)
+   CLOCK: [2014-10-20 Mon 10:20]--[2014-10-20 Mon 10:25] =>  0:05
+
+
+** add documentation, and some sanity checking
+   CLOCK: [2014-10-20 Mon 10:35]--[2014-10-20 Mon 10:47] =>  0:12
+   CLOCK: [2014-10-20 Mon 10:25]--[2014-10-20 Mon 10:35] =>  0:10
+
+** sketch the undraw interface
