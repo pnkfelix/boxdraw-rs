@@ -1,9 +1,28 @@
+use std::fmt;
 use Command;
 
 pub struct Grid {
     width: u32,
     height: u32,
     chars: Vec<char>,
+}
+
+pub enum ParseErr {
+    PrematureLineEnd(u32, String, u32),
+    BadTerminationChar(u32, String, char),
+}
+
+impl fmt::Show for ParseErr {
+    fn fmt(&self, w: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            PrematureLineEnd(h, ref s, width) =>
+                write!(w, "line {} content {} ended prematurely; \
+                           expected {} characters", h, s, width),
+            BadTerminationChar(h, ref s, c) =>
+                write!(w, "line {} expected end of input or line \
+                           after {}, got {}", h, s, c),
+        }
+    }
 }
 
 impl Grid {
@@ -23,6 +42,46 @@ impl Grid {
             s.push('\n');
         }
         s
+    }
+
+    pub fn from_str(s: &str) -> Result<Grid, ParseErr> {
+        let mut w = 0u32;
+        for c in s.chars() {
+            if c == '\n' {
+                break;
+            } else {
+                w += 1;
+            }
+        }
+
+        let mut grid = vec![];
+        let mut chars = s.chars();
+        let mut h = 0;
+
+        loop {
+            h += 1;
+            let row_start = grid.len();
+            for i in range(0, w) {
+                match (i, chars.next()) {
+                    (0, None) => break,
+                    (_, None) => {
+                        let line = grid.slice_from(row_start).to_string();
+                        return Err(PrematureLineEnd(h, line, w))
+                    }
+                    (_, Some(c)) => grid.push(c),
+                }
+            }
+            match chars.next() {
+                None => break,
+                Some('\n') => continue,
+                Some(c) => {
+                    let line = grid.slice_from(row_start).to_string();
+                    return Err(BadTerminationChar(h, line, c))
+                }
+            }
+        }
+
+        Ok(Grid { width: w, height: h, chars: grid })
     }
 
     pub fn get(&self, x: u32, y: u32) -> char {

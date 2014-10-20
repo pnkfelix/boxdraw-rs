@@ -31,7 +31,7 @@ pub fn rect(x: u32, y: u32, w: u32, h: u32, fill: char) -> Command {
     Command { x: x, y: y, w: w, h: h, fill: fill }
 }
 
-mod grid;
+pub mod grid;
 
 impl Script {
     /// Creates an empty script for `width` x `height` picture
@@ -92,7 +92,23 @@ impl Script {
 pub trait Undraw {
     /// Given `picture`, a string that holds a rectangular ASCII art
     /// image, return a script that when run produces the same image.
-    fn undraw(&self, picture: String) -> Script;
+    fn undraw(&self, picture: &str) -> Script;
+}
+
+pub struct Mismatch {
+    pub s: Script,
+    pub goal: String,
+    pub made: String,
+}
+
+pub fn check_undraw(picture: &str, u: &Undraw) -> Result<Script, Mismatch> {
+    let s = u.undraw(picture);
+    let made = s.run();
+    if made.as_slice() != picture {
+        Err(Mismatch { s: s, goal: picture.to_string(), made: made })
+    } else {
+        Ok(s)
+    }
 }
 
 #[cfg(test)]

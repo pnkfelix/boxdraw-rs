@@ -26,4 +26,6 @@
    CLOCK: [2014-10-20 Mon 10:35]--[2014-10-20 Mon 10:47] =>  0:12
    CLOCK: [2014-10-20 Mon 10:25]--[2014-10-20 Mon 10:35] =>  0:10
 
-** sketch the undraw interface
+** undraw util: expose grid mod and add parse method for it
+   CLOCK: [2014-10-20 Mon 10:53]--[2014-10-20 Mon 11:32] =>  0:39
+
