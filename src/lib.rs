@@ -95,6 +95,7 @@ pub trait Undraw {
     fn undraw(&self, picture: &str) -> Script;
 }
 
+#[deriving(Show)]
 pub struct Mismatch {
     pub s: Script,
     pub goal: String,
