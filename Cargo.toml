@@ -1,0 +1,5 @@
+[package]
+
+name = "boxdraw-rs"
+version = "0.0.1"
+authors = ["pnkfelix"]
