@@ -1,3 +1,5 @@
+use std::fmt;
+
 /// Script for drawing rectangle-based ASCII art.
 #[deriving(Clone, Show)]
 pub struct Script {
@@ -95,18 +97,24 @@ pub trait Undraw {
     fn undraw(&self, picture: &str) -> Script;
 }
 
-#[deriving(Show)]
 pub struct Mismatch {
-    pub s: Script,
+    pub script: Script,
     pub goal: String,
     pub made: String,
+}
+
+impl fmt::Show for Mismatch {
+    fn fmt(&self, w: &mut fmt::Formatter) -> fmt::Result {
+        write!(w, "Mismatch {{ goal: \"{}\", made: \"{}\", script: {} }}",
+               self.goal, self.made, self.script)
+    }
 }
 
 pub fn check_undraw(picture: &str, u: &Undraw) -> Result<Script, Mismatch> {
     let s = u.undraw(picture);
     let made = s.run();
     if made.as_slice() != picture {
-        Err(Mismatch { s: s, goal: picture.to_string(), made: made })
+        Err(Mismatch { script: s, goal: picture.to_string(), made: made })
     } else {
         Ok(s)
     }
