@@ -114,7 +114,8 @@ impl Grid {
         assert!(x < self.width);
         assert!(y < self.height);
         let idx = y * self.width + x;
-        *self.chars.get_mut(idx.to_uint().unwrap()) = c;
+        // *self.chars.get_mut(idx.to_uint().unwrap()) = c;
+        self.chars[idx.to_uint().unwrap()] = c;
     }
 
     pub fn exec(&mut self, command: &Command) {
